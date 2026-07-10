@@ -1,0 +1,10 @@
+<svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Rungs 심볼</title>
+  <desc>사다리 발판 3개를 형상화한 Rungs 브랜드 심볼. 청록 배경 위에 아이보리색 기둥과 발판, 맨 위 칸만 골드로 강조되어 있다.</desc>
+  <rect x="0" y="0" width="260" height="260" rx="58" fill="#0F7E9E"/>
+  <rect x="80" y="28" width="22" height="204" rx="11" fill="#FFFDF8"/>
+  <rect x="158" y="28" width="22" height="204" rx="11" fill="#FFFDF8"/>
+  <rect x="80" y="190" width="100" height="22" rx="11" fill="#FFFDF8"/>
+  <rect x="80" y="125" width="100" height="22" rx="11" fill="#FFFDF8"/>
+  <rect x="80" y="60" width="100" height="22" rx="11" fill="#FFC24B"/>
+</svg>

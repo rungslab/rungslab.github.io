@@ -1,0 +1,16 @@
+<svg viewBox="0 0 420 140" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Rungs 로고 (가로형 워드마크 조합)</title>
+  <desc>Rungs 심볼과 RUNGS 워드마크, "한 칸씩, 다음 레벨로" 태그라인으로 구성된 가로형 로고.</desc>
+
+  <g transform="translate(15,15)">
+    <rect x="0" y="0" width="110" height="110" rx="25" fill="#0F7E9E"/>
+    <rect x="34" y="12" width="9" height="86" rx="4.5" fill="#FFFDF8"/>
+    <rect x="67" y="12" width="9" height="86" rx="4.5" fill="#FFFDF8"/>
+    <rect x="34" y="80" width="42" height="9" rx="4.5" fill="#FFFDF8"/>
+    <rect x="34" y="53" width="42" height="9" rx="4.5" fill="#FFFDF8"/>
+    <rect x="34" y="25" width="42" height="9" rx="4.5" fill="#FFC24B"/>
+  </g>
+
+  <text x="150" y="72" font-size="44" font-weight="800" letter-spacing="2" fill="#1A1A2E" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">RUNGS</text>
+  <text x="151" y="100" font-size="15" fill="#6B7280" font-family="system-ui, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif">한 칸씩, 다음 레벨로</text>
+</svg>
