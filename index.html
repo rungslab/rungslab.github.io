@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>엔트리로 배우는 AI</title>
+<link rel="icon" type="image/svg+xml" href="브랜드로고/rungs_logo_icon.svg">
+<style>
+  :root {
+    --image-color: #3aa6ff;
+    --face-color: #b06be0;
+    --voice-color: #2ec27e;
+    --data-color: #ff9f43;
+    --easy-color: #2ec27e;
+    --normal-color: #ffb020;
+    --hard-color: #ff5c5c;
+    --bg-color: #fff8ef;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    background: var(--bg-color);
+    color: #2d2d2d;
+  }
+
+  header {
+    background: linear-gradient(135deg, #6fd6e0 0%, #3fafc9 55%, #1f8fae 100%);
+    color: white;
+    padding: 48px 20px 40px;
+    text-align: center;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  }
+
+  .brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .brand-logo {
+    width: clamp(40px, 7vw, 56px);
+    height: clamp(40px, 7vw, 56px);
+    border-radius: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+  }
+
+  header h1 {
+    font-size: clamp(28px, 6vw, 46px);
+    margin: 0;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+  }
+
+  header p {
+    font-size: clamp(15px, 3vw, 20px);
+    margin: 0;
+    opacity: 0.95;
+  }
+
+  main {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .filter-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    background: white;
+    color: #555;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .filter-btn:hover { transform: translateY(-2px); }
+
+  .filter-btn.active {
+    color: white;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.18);
+  }
+
+  .filter-btn[data-filter="all"].active { background: #444; }
+  .filter-btn[data-filter="image"].active { background: var(--image-color); }
+  .filter-btn[data-filter="face"].active { background: var(--face-color); }
+  .filter-btn[data-filter="voice"].active { background: var(--voice-color); }
+  .filter-btn[data-filter="data"].active { background: var(--data-color); }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+  }
+
+  .card {
+    background: white;
+    border-radius: 22px;
+    padding: 22px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    border: 3px solid transparent;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.14);
+  }
+
+  .card.cat-image:hover { border-color: var(--image-color); }
+  .card.cat-face:hover { border-color: var(--face-color); }
+  .card.cat-voice:hover { border-color: var(--voice-color); }
+  .card.cat-data:hover { border-color: var(--data-color); }
+
+  .card-emoji {
+    font-size: 46px;
+    line-height: 1;
+  }
+
+  .card-title {
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0;
+  }
+
+  .card-desc {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.5;
+    flex-grow: 1;
+    margin: 0;
+  }
+
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .badge.cat-image { background: var(--image-color); }
+  .badge.cat-face { background: var(--face-color); }
+  .badge.cat-voice { background: var(--voice-color); }
+  .badge.cat-data { background: var(--data-color); }
+
+  .badge.diff-easy { background: var(--easy-color); }
+  .badge.diff-normal { background: var(--normal-color); }
+  .badge.diff-hard { background: var(--hard-color); }
+
+  .card-file {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+    word-break: break-all;
+  }
+
+  .community {
+    max-width: 760px;
+    margin: 12px auto 0;
+    background: white;
+    border-radius: 22px;
+    padding: 28px 24px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  }
+
+  .community h2 {
+    margin: 0 0 8px;
+    font-size: clamp(20px, 4vw, 26px);
+  }
+
+  .community p {
+    margin: 0 0 20px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .community-note {
+    font-size: 13px;
+    color: #999;
+    margin-top: 16px !important;
+  }
+
+  .card {
+    cursor: pointer;
+  }
+
+  .card:focus-visible {
+    outline: 3px solid var(--image-color);
+    outline-offset: 2px;
+  }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 20, 30, 0.55);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+  }
+
+  .modal-box {
+    background: white;
+    border-radius: 26px;
+    padding: 32px;
+    max-width: 460px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    border: none;
+    background: #f1f1f1;
+    color: #555;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .modal-close:hover { background: #e2e2e2; }
+
+  .modal-emoji {
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .modal-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 10px;
+  }
+
+  .modal-desc {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 18px;
+  }
+
+  .modal-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .modal-overview {
+    background: var(--bg-color);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+  }
+
+  .modal-overview dt {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    margin-top: 12px;
+  }
+
+  .modal-overview dt:first-child { margin-top: 0; }
+
+  .modal-overview dd {
+    margin: 3px 0 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .modal-download-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    background: #1f8fae;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px rgba(31,143,174,0.35);
+    transition: transform 0.15s ease;
+  }
+
+  .modal-download-btn:hover { transform: translateY(-2px); }
+
+  .modal-download-btn.secondary {
+    background: white;
+    color: #1f8fae;
+    border: 2px solid #1f8fae;
+    box-shadow: none;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: #999;
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .card-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+    header { padding: 36px 16px 30px; }
+  }
+
+  @media (max-width: 420px) {
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-row">
+    <img src="브랜드로고/rungs_logo_icon.svg" alt="Rungs 로고" class="brand-logo">
+    <h1>엔트리로 배우는 AI</h1>
+  </div>
+  <p>블록코딩으로 만나는 10가지 인공지능 프로젝트 — 이미지 인식부터 데이터 예측까지!</p>
+</header>
+
+<main>
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">✨ 전체보기</button>
+    <button class="filter-btn" data-filter="image">📷 이미지인식</button>
+    <button class="filter-btn" data-filter="face">😊 얼굴인식</button>
+    <button class="filter-btn" data-filter="voice">🎤 음성인식</button>
+    <button class="filter-btn" data-filter="data">📊 데이터예측</button>
+  </div>
+
+  <div class="card-grid" id="cardGrid">
+
+    <div class="card cat-voice" data-category="voice" data-index="0" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🕵️</div>
+      <h2 class="card-title">Secret Code</h2>
+      <p class="card-desc">목소리로 스파이를 움직이는 음성인식 게임이에요. 말한 장소 이름을 인공지능이 알아듣고 스파이를 그곳으로 보내줘요.</p>
+      <div class="badge-row">
+        <span class="badge cat-voice">🎤 음성인식</span>
+        <span class="badge diff-easy">쉬움</span>
+      </div>
+    </div>
+
+    <div class="card cat-face" data-category="face" data-index="1" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🎯</div>
+      <h2 class="card-title">Laser Eye</h2>
+      <p class="card-desc">눈으로 조준하고 스페이스바로 쏘는 얼굴 인식 사격 게임! 고개를 움직여 목표물에 눈을 맞춰보세요.</p>
+      <div class="badge-row">
+        <span class="badge cat-face">😊 얼굴인식</span>
+        <span class="badge diff-normal">보통</span>
+      </div>
+    </div>
+
+    <div class="card cat-image" data-category="image" data-index="2" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🐼</div>
+      <h2 class="card-title">Shy Panda</h2>
+      <p class="card-desc">누가 창문으로 쳐다보고 있는지 인공지능이 알아채는 부끄럼쟁이 판다예요. 웹캠 이미지로 사람이 있는지 판별해요.</p>
+      <div class="badge-row">
+        <span class="badge cat-image">📷 이미지인식</span>
+        <span class="badge diff-easy">쉬움</span>
+      </div>
+    </div>
+
+    <div class="card cat-face" data-category="face" data-index="3" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🐼</div>
+      <h2 class="card-title">Shy Panda — 얼굴 인식 버전</h2>
+      <p class="card-desc">같은 부끄럼쟁이 판다지만 이번엔 이미지 분류 대신 얼굴 좌표 계산으로 창문 속 사람을 알아채요.</p>
+      <div class="badge-row">
+        <span class="badge cat-face">😊 얼굴인식</span>
+        <span class="badge diff-normal">보통</span>
+      </div>
+    </div>
+
+    <div class="card cat-image" data-category="image" data-index="4" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🐾</div>
+      <h2 class="card-title">가상 애완동물 (Flobzy)</h2>
+      <p class="card-desc">배고프고 목마르고 슬퍼하는 나만의 반려동물! 웹캠으로 진짜 음식이나 물을 보여주면 AI가 알아보고 채워줘요.</p>
+      <div class="badge-row">
+        <span class="badge cat-image">📷 이미지인식</span>
+        <span class="badge diff-hard">어려움</span>
+      </div>
+    </div>
+
+    <div class="card cat-data" data-category="data" data-index="5" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🎒</div>
+      <h2 class="card-title">Journey to School</h2>
+      <p class="card-desc">나이, 거리, 친구 수 같은 숫자 데이터로 학교 가는 방법을 예측하는 인공지능을 만들어요.</p>
+      <div class="badge-row">
+        <span class="badge cat-data">📊 데이터예측</span>
+        <span class="badge diff-easy">쉬움</span>
+      </div>
+    </div>
+
+    <div class="card cat-data" data-category="data" data-index="6" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🏀</div>
+      <h2 class="card-title">Catch the Ball</h2>
+      <p class="card-desc">농구공이 날아가고 튕기는 모습을 물리 시뮬레이션으로 재현하고, 그 데이터를 모아 머신러닝 학습에 써봐요.</p>
+      <div class="badge-row">
+        <span class="badge cat-data">📊 데이터예측</span>
+        <span class="badge diff-hard">어려움</span>
+      </div>
+    </div>
+
+    <div class="card cat-image" data-category="image" data-index="7" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🃏</div>
+      <h2 class="card-title">Snap!</h2>
+      <p class="card-desc">실제 카드를 웹캠에 보여주면 AI가 클럽·하트·다이아몬드·스페이드 무늬를 알아맞히는 카드 게임이에요.</p>
+      <div class="badge-row">
+        <span class="badge cat-image">📷 이미지인식</span>
+        <span class="badge diff-hard">어려움</span>
+      </div>
+    </div>
+
+    <div class="card cat-data" data-category="data" data-index="8" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🐞</div>
+      <h2 class="card-title">Shoot the Bug</h2>
+      <p class="card-desc">돌아다니는 벌레를 네 가지 방식으로 맞혀보고, 쌓인 데이터로 머신러닝 조준 모델을 학습시켜요.</p>
+      <div class="badge-row">
+        <span class="badge cat-data">📊 데이터예측</span>
+        <span class="badge diff-hard">어려움</span>
+      </div>
+    </div>
+
+    <div class="card cat-face" data-category="face" data-index="9" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">😎</div>
+      <h2 class="card-title">Face Finder</h2>
+      <p class="card-desc">웹캠 속 내 얼굴 위로 만화 같은 눈과 코가 실시간으로 따라다니는 나만의 AR 얼굴 필터를 만들어요.</p>
+      <div class="badge-row">
+        <span class="badge cat-face">😊 얼굴인식</span>
+        <span class="badge diff-easy">쉬움</span>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<section class="community">
+  <h2>💬 학부모·선생님 의견 나누기</h2>
+  <p>이 페이지가 도움이 되었나요? 궁금한 점이나 의견을 자유롭게 남겨주세요. GitHub 계정으로 로그인하면 댓글을 남길 수 있어요.</p>
+
+  <!--
+    ▼ Giscus 설정 방법 (GitHub Pages 배포 후 진행) ▼
+    1) GitHub에 이 프로젝트용 "공개(public)" 저장소를 만든다.
+    2) 저장소 Settings > General > Features 에서 "Discussions"를 켠다.
+    3) https://github.com/apps/giscus 에서 giscus 앱을 그 저장소에 설치(권한 허용)한다.
+    4) https://giscus.app 접속 → 저장소 이름 입력 → 옵션 선택 후 하단에 생성되는
+       <script> 코드를 확인한다.
+    5) 그 코드에 있는 data-repo-id, data-category, data-category-id 값을
+       아래 script 태그의 동일한 속성에 그대로 복사해 넣는다.
+       (data-repo도 "username/저장소이름" 형태로 바꿔준다)
+  -->
+  <div id="giscus-container"></div>
+  <script src="https://giscus.app/client.js"
+    data-repo="[깃허브아이디]/rungs"
+    data-repo-id="[giscus.app에서 발급된 repo-id로 교체]"
+    data-category="Announcements"
+    data-category-id="[giscus.app에서 발급된 category-id로 교체]"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="ko"
+    crossorigin="anonymous"
+    async>
+  </script>
+
+  <p class="community-note">※ 위 저장소 정보를 채워 넣기 전까지는 댓글창이 보이지 않아요. giscus.app에서 발급받은 값으로 교체하면 바로 작동해요.</p>
+</section>
+
+<footer>
+  총 10개 프로젝트 · 엔트리(Entry) 기반 AI 교육 콘텐츠 · 초안 v0.1
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="닫기">✕</button>
+    <div class="modal-emoji" id="modalEmoji"></div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-badge-row" id="modalBadgeRow"></div>
+    <dl class="modal-overview">
+      <dt>제작 도구</dt>
+      <dd id="modalTool"></dd>
+      <dt>사용 기술</dt>
+      <dd id="modalTech"></dd>
+      <dt>오브젝트 수</dt>
+      <dd id="modalObjects"></dd>
+      <dt>핵심 개념</dt>
+      <dd id="modalConcept"></dd>
+    </dl>
+    <div class="modal-download-row">
+      <a class="modal-download-btn" id="modalDownloadWorksheet" download>📄 워크시트 다운로드</a>
+      <a class="modal-download-btn secondary" id="modalDownloadEntry" download>🎮 엔트리 프로젝트 파일(.ent) 다운로드</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.card');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // ── 프로젝트 상세 정보 (모달용) ──
+  const projects = [
+    {
+      emoji: '🕵️', title: 'Secret Code',
+      desc: '목소리로 스파이를 움직이는 음성인식 게임이에요. 말한 장소 이름을 인공지능이 알아듣고 스파이를 그곳으로 보내줘요.',
+      catBadge: '🎤 음성인식', catClass: 'cat-voice', diffBadge: '쉬움', diffClass: 'diff-easy',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 오디오 감지(음성을 텍스트로 변환하기)',
+      objects: '2개 (스파이, 지도)',
+      concept: '음성 인식 / 문자열에 특정 단어가 포함되어 있는지 확인하기 / 나만의 블록',
+      file: '워크시트/Secret_code_엔트리_워크시트.pdf', fileName: 'Secret_code_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/secret code.ent', entryFileName: 'secret code.ent'
+    },
+    {
+      emoji: '🎯', title: 'Laser Eye',
+      desc: '눈으로 조준하고 스페이스바로 쏘는 얼굴 인식 사격 게임! 고개를 움직여 목표물에 눈을 맞춰보세요.',
+      catBadge: '😊 얼굴인식', catClass: 'cat-face', diffBadge: '보통', diffClass: 'diff-normal',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 얼굴 인식(왼쪽/오른쪽 눈 좌표 읽기)',
+      objects: '5개 (번쩍, 목표, 오른쪽 빔, 왼쪽 빔, 그라데이션)',
+      concept: '얼굴 랜드마크 좌표 읽기 / 신호로 여러 오브젝트 연결하기 / 나만의 블록',
+      file: '워크시트/Laser_eye_엔트리_워크시트.pdf', fileName: 'Laser_eye_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/laser eye.ent', entryFileName: 'laser eye.ent'
+    },
+    {
+      emoji: '🐼', title: 'Shy Panda',
+      desc: '누가 창문으로 쳐다보고 있는지 인공지능이 알아채는 부끄럼쟁이 판다예요. 웹캠 이미지로 사람이 있는지 판별해요.',
+      catBadge: '📷 이미지인식', catClass: 'cat-image', diffBadge: '쉬움', diffClass: 'diff-easy',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 웹캠 영상 이미지 분류(사람 있음/없음)',
+      objects: '3개 (부끄럼쟁이판다, 창문, 배경)',
+      concept: '실시간 이미지 분류 / 변수로 인식 결과 공유하기 / 만약~아니면',
+      file: '워크시트/ShyPanda_엔트리_워크시트.pdf', fileName: 'ShyPanda_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/ShyPanda.ent', entryFileName: 'ShyPanda.ent'
+    },
+    {
+      emoji: '🐼', title: 'Shy Panda — 얼굴 인식 버전',
+      desc: '같은 부끄럼쟁이 판다지만 이번엔 이미지 분류 대신 얼굴 좌표 계산으로 창문 속 사람을 알아채요.',
+      catBadge: '😊 얼굴인식', catClass: 'cat-face', diffBadge: '보통', diffClass: 'diff-normal',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 얼굴 인식(눈·턱 좌표로 창문 안에 있는지 계산)',
+      objects: '3개 (부끄럼쟁이판다, 창문, 배경)',
+      concept: '얼굴 랜드마크 좌표 비교 / 여러 조건 동시에 확인(그리고) / 중첩된 만약~아니면',
+      file: '워크시트/ShyPanda_얼굴인식버전_엔트리_워크시트.pdf', fileName: 'ShyPanda_얼굴인식버전_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/ShyPanda-window내 얼굴인식.ent', entryFileName: 'ShyPanda-window내 얼굴인식.ent'
+    },
+    {
+      emoji: '🐾', title: '가상 애완동물 (Flobzy)',
+      desc: '배고프고 목마르고 슬퍼하는 나만의 반려동물! 웹캠으로 진짜 음식이나 물을 보여주면 AI가 알아보고 채워줘요.',
+      catBadge: '📷 이미지인식', catClass: 'cat-image', diffBadge: '어려움', diffClass: 'diff-hard',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 사물(이미지) 인식으로 먹이/음료/애정표현 구분',
+      objects: '2개 (flobzy, webcam)',
+      concept: '시간에 따라 변하는 상태 변수 / 이미지 인식 결과에 따라 분기하기 / 여러 나만의 블록 조합',
+      file: '워크시트/가상애완동물_엔트리_워크시트.pdf', fileName: '가상애완동물_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/가상애완동물.ent', entryFileName: '가상애완동물.ent'
+    },
+    {
+      emoji: '🎒', title: 'Journey to School',
+      desc: '나이, 거리, 친구 수 같은 숫자 데이터로 학교 가는 방법을 예측하는 인공지능을 만들어요.',
+      catBadge: '📊 데이터예측', catClass: 'cat-data', diffBadge: '쉬움', diffClass: 'diff-easy',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 – 표(테이블) 데이터를 이용한 예측 모델 학습',
+      objects: '1개 (엔트리봇)',
+      concept: '표 데이터 학습 / 묻고 대답 받기 / 변수 저장 / 값으로 예측하기',
+      file: '워크시트/Journey_to_school_엔트리_워크시트.pdf', fileName: 'Journey_to_school_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/journey to school.ent', entryFileName: 'journey to school.ent'
+    },
+    {
+      emoji: '🏀', title: 'Catch the Ball',
+      desc: '농구공이 날아가고 튕기는 모습을 물리 시뮬레이션으로 재현하고, 그 데이터를 모아 머신러닝 학습에 써봐요.',
+      catBadge: '📊 데이터예측', catClass: 'cat-data', diffBadge: '어려움', diffClass: 'diff-hard',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '물리 시뮬레이션(중력·탄성) + 표(테이블) 기반 학습 데이터 수집',
+      objects: '2개 (catcher, basketball)',
+      concept: '나만의 블록(함수) / 변수로 물리 값 관리 / 표에 데이터 기록하기',
+      file: '워크시트/Catch_the_ball_엔트리_워크시트.pdf', fileName: 'Catch_the_ball_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/Catch the ball.ent', entryFileName: 'Catch the ball.ent'
+    },
+    {
+      emoji: '🃏', title: 'Snap!',
+      desc: '실제 카드를 웹캠에 보여주면 AI가 클럽·하트·다이아몬드·스페이드 무늬를 알아맞히는 카드 게임이에요.',
+      catBadge: '📷 이미지인식', catClass: 'cat-image', diffBadge: '어려움', diffClass: 'diff-hard',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 사물(이미지) 인식으로 카드 무늬 판별',
+      objects: '6개 (snap, card mask, message, computer card, 배경, player card window)',
+      concept: '이미지 분류 모델 활용 / 신호 주고받기 / 나만의 블록으로 코드 정리',
+      file: '워크시트/Snap_엔트리_워크시트.pdf', fileName: 'Snap_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/snap.ent', entryFileName: 'snap.ent'
+    },
+    {
+      emoji: '🐞', title: 'Shoot the Bug',
+      desc: '돌아다니는 벌레를 네 가지 방식으로 맞혀보고, 쌓인 데이터로 머신러닝 조준 모델을 학습시켜요.',
+      catBadge: '📊 데이터예측', catClass: 'cat-data', diffBadge: '어려움', diffClass: 'diff-hard',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '표(테이블) 기반 학습 데이터 수집 + (준비된) 머신러닝 조준 모드',
+      objects: '4개 (공, 벌레, record, 배경)',
+      concept: '여러 개의 나만의 블록(함수)으로 플레이 모드 나누기 / 표에 데이터 기록',
+      file: '워크시트/Shoot_the_bug_엔트리_워크시트.pdf', fileName: 'Shoot_the_bug_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/shoot the bug.ent', entryFileName: 'shoot the bug.ent'
+    },
+    {
+      emoji: '😎', title: 'Face Finder',
+      desc: '웹캠 속 내 얼굴 위로 만화 같은 눈과 코가 실시간으로 따라다니는 나만의 AR 얼굴 필터를 만들어요.',
+      catBadge: '😊 얼굴인식', catClass: 'cat-face', diffBadge: '쉬움', diffClass: 'diff-easy',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '엔트리 인공지능 블록 – 얼굴 인식',
+      objects: '3개 (오른쪽눈, 왼쪽눈, 코)',
+      concept: '사전 학습 모델 활용 / 얼굴 랜드마크 좌표 읽기 / 오브젝트 위치 이동',
+      file: '워크시트/Face_finder_엔트리_워크시트.pdf', fileName: 'Face_finder_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/Face finder.ent', entryFileName: 'Face finder.ent'
+    }
+  ];
+
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalEmoji = document.getElementById('modalEmoji');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalBadgeRow = document.getElementById('modalBadgeRow');
+  const modalTool = document.getElementById('modalTool');
+  const modalTech = document.getElementById('modalTech');
+  const modalObjects = document.getElementById('modalObjects');
+  const modalConcept = document.getElementById('modalConcept');
+  const modalDownloadWorksheet = document.getElementById('modalDownloadWorksheet');
+  const modalDownloadEntry = document.getElementById('modalDownloadEntry');
+  const modalClose = document.getElementById('modalClose');
+
+  function openModal(index) {
+    const p = projects[index];
+    if (!p) return;
+    modalEmoji.textContent = p.emoji;
+    modalTitle.textContent = p.title;
+    modalDesc.textContent = p.desc;
+    modalBadgeRow.innerHTML =
+      '<span class="badge ' + p.catClass + '">' + p.catBadge + '</span>' +
+      '<span class="badge ' + p.diffClass + '">' + p.diffBadge + '</span>';
+    modalTool.textContent = p.tool;
+    modalTech.textContent = p.tech;
+    modalObjects.textContent = p.objects;
+    modalConcept.textContent = p.concept;
+    modalDownloadWorksheet.href = p.file;
+    modalDownloadWorksheet.download = p.fileName;
+    modalDownloadWorksheet.textContent = '📄 ' + p.fileName + ' 다운로드';
+    modalDownloadEntry.href = p.entryFile;
+    modalDownloadEntry.download = p.entryFileName;
+    modalDownloadEntry.textContent = '🎮 ' + p.entryFileName + ' 다운로드';
+    modalOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  cards.forEach(card => {
+    const idx = Number(card.dataset.index);
+    card.addEventListener('click', () => openModal(idx));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(idx);
+      }
+    });
+  });
+
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+</script>
+
+</body>
+</html>
