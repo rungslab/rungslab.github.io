@@ -11,6 +11,7 @@
     --face-color: #b06be0;
     --voice-color: #2ec27e;
     --data-color: #ff9f43;
+    --text-color: #e64980;
     --easy-color: #2ec27e;
     --normal-color: #ffb020;
     --hard-color: #ff5c5c;
@@ -102,6 +103,7 @@
   .filter-btn[data-filter="face"].active { background: var(--face-color); }
   .filter-btn[data-filter="voice"].active { background: var(--voice-color); }
   .filter-btn[data-filter="data"].active { background: var(--data-color); }
+  .filter-btn[data-filter="text"].active { background: var(--text-color); }
 
   .card-grid {
     display: grid;
@@ -132,6 +134,7 @@
   .card.cat-face:hover { border-color: var(--face-color); }
   .card.cat-voice:hover { border-color: var(--voice-color); }
   .card.cat-data:hover { border-color: var(--data-color); }
+  .card.cat-text:hover { border-color: var(--text-color); }
 
   .card-emoji {
     font-size: 46px;
@@ -173,6 +176,7 @@
   .badge.cat-face { background: var(--face-color); }
   .badge.cat-voice { background: var(--voice-color); }
   .badge.cat-data { background: var(--data-color); }
+  .badge.cat-text { background: var(--text-color); }
 
   .badge.diff-easy { background: var(--easy-color); }
   .badge.diff-normal { background: var(--normal-color); }
@@ -382,7 +386,7 @@
     <img src="브랜드로고/rungs_logo_icon.svg" alt="Rungs 로고" class="brand-logo">
     <h1>엔트리로 배우는 AI</h1>
   </div>
-  <p>블록코딩으로 만나는 10가지 인공지능 프로젝트 — 이미지 인식부터 데이터 예측까지!</p>
+  <p>블록코딩으로 만나는 12가지 인공지능 프로젝트 — 이미지 인식부터 데이터 예측까지!</p>
 </header>
 
 <main>
@@ -392,6 +396,7 @@
     <button class="filter-btn" data-filter="face">😊 얼굴인식</button>
     <button class="filter-btn" data-filter="voice">🎤 음성인식</button>
     <button class="filter-btn" data-filter="data">📊 데이터예측</button>
+    <button class="filter-btn" data-filter="text">💬 텍스트인식</button>
   </div>
 
   <div class="card-grid" id="cardGrid">
@@ -496,6 +501,26 @@
       </div>
     </div>
 
+    <div class="card cat-text" data-category="text" data-index="10" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">💬</div>
+      <h2 class="card-title">AI 친구 만들기</h2>
+      <p class="card-desc">내가 입력한 문장 속에 '안녕', '심심해' 같은 단어가 들어있는지 인공지능이 판단해서 어울리는 대답을 해주는 나만의 챗봇을 만들어요.</p>
+      <div class="badge-row">
+        <span class="badge cat-text">💬 텍스트인식</span>
+        <span class="badge diff-easy">쉬움</span>
+      </div>
+    </div>
+
+    <div class="card cat-voice" data-category="voice" data-index="11" tabindex="0" role="button" aria-haspopup="dialog">
+      <div class="card-emoji">🎤</div>
+      <h2 class="card-title">소리 지휘자</h2>
+      <p class="card-desc">손뼉을 치거나 크게 소리를 내면 마이크 음량을 감지해 캐릭터가 점프하는 리듬 게임! 다가오는 쓰레기 장애물을 소리로 피해보세요.</p>
+      <div class="badge-row">
+        <span class="badge cat-voice">🎤 음성인식</span>
+        <span class="badge diff-normal">보통</span>
+      </div>
+    </div>
+
   </div>
 </main>
 
@@ -514,7 +539,7 @@
 </section>
 
 <footer>
-  총 10개 프로젝트 · 엔트리(Entry) 기반 AI 교육 콘텐츠 · 초안 v0.1
+  총 12개 프로젝트 · 엔트리(Entry) 기반 AI 교육 콘텐츠 · 초안 v0.1
   <div class="footer-copyright">
     © 2026 Rungs. All rights reserved.<br>
     일부 콘텐츠는 Machine Learning for Kids(machinelearningforkids.co.uk)의 자료를 기반으로 제작되었으며, CC BY-NC-SA 4.0 라이선스를 따릅니다.
@@ -676,6 +701,28 @@
       concept: '사전 학습 모델 활용 / 얼굴 랜드마크 좌표 읽기 / 오브젝트 위치 이동',
       file: '워크시트/Face_finder_엔트리_워크시트.pdf', fileName: 'Face_finder_엔트리_워크시트.pdf',
       entryFile: '워크시트/Entry files/Face finder.ent', entryFileName: 'Face finder.ent'
+    },
+    {
+      emoji: '💬', title: 'AI 친구 만들기',
+      desc: '내가 입력한 문장 속에 \'안녕\', \'심심해\' 같은 단어가 들어있는지 인공지능이 판단해서 어울리는 대답을 해주는 나만의 챗봇을 만들어요.',
+      catBadge: '💬 텍스트인식', catClass: 'cat-text', diffBadge: '쉬움', diffClass: 'diff-easy',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '텍스트 입력 처리, 조건문(키워드 포함 여부 판단)',
+      objects: '1개 (AI 친구 캐릭터 — 엔트리봇)',
+      concept: '문자열 포함 여부 판단 / if-else 조건 분기 / 예외 처리(기본 응답)',
+      file: '워크시트/AI_친구_만들기_엔트리_워크시트.pdf', fileName: 'AI_친구_만들기_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/AI_친구_만들기.ent', entryFileName: 'AI_친구_만들기.ent'
+    },
+    {
+      emoji: '🎤', title: '소리 지휘자',
+      desc: '손뼉을 치거나 크게 소리를 내면 마이크 음량을 감지해 캐릭터가 점프하는 리듬 게임! 다가오는 쓰레기 장애물을 소리로 피해보세요.',
+      catBadge: '🎤 음성인식', catClass: 'cat-voice', diffBadge: '보통', diffClass: 'diff-normal',
+      tool: '엔트리(Entry) — playentry.org',
+      tech: '인공지능 음성 인식 — 마이크 소리 크기(음량) 감지',
+      objects: '2개 (캐릭터, 쓰레기(장애물))',
+      concept: '소리 크기 임계값 설정 / 실시간 센서값 반응 / 반복문 / 충돌 판정',
+      file: '워크시트/소리_지휘자_엔트리_워크시트.pdf', fileName: '소리_지휘자_엔트리_워크시트.pdf',
+      entryFile: '워크시트/Entry files/소리 지휘자 _Sound Conductor.ent', entryFileName: '소리 지휘자 _Sound Conductor.ent'
     }
   ];
 
